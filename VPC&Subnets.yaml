@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Create VPC and subnets
+Description: Create Full VPC Stack
 Parameters:
   Tenancy:
     Type: String
@@ -23,13 +23,22 @@ Resources:
 
 # Lets create a Subnet now
 
- MySubnet:
+ SubnetA:
     Type: AWS::EC2::Subnet
     Properties:
      VpcId: !Ref VPC
      CidrBlock: 10.1.1.0/24
      AvailabilityZone: !Select 
       - 0
+      - !GetAZs 
+       Ref: 'AWS::Region'
+ SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+     VpcId: !Ref VPC
+     CidrBlock: 10.1.2.0/24
+     AvailabilityZone: !Select 
+      - 1
       - !GetAZs 
        Ref: 'AWS::Region'
 
@@ -42,4 +51,15 @@ Resources:
   Properties:
     VpcId: !Ref VPC
     InternetGatewayId: !Ref InternetGateway
+Outputs:
+  MyVPC:
+   Description: List VPC ID
+   Value: !Ref VPC
+   Export:
+    Name: MyVPC
+  MySubnet:
+   Description: List 1st Subnet ID
+   Value: !Ref SubnetA
+   Export:
+    Name: MySubnet
     

@@ -1,0 +1,29 @@
+---
+Resource:
+  MySecurityGroupCF:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+     GroupDescription: lets create a SG
+     GroupName: New SG-CF
+     SecurityGroupEgress:
+      -estring
+     SecurityGroupIngress: 
+       -CidrIp: String
+          CidrIpv6: String
+          Description: String
+          FromPort: Integer
+          #A value of -1 indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes.
+          IpProtocol: String
+          #[VPC only] Use -1 to specify all protocols. When authorizing security group rules, specifying -1 or a protocol number other than tcp, 
+          # udp, icmp, or icmpv6 allows traffic on all ports, regardless of any port range you specify. For tcp, udp, and icmp, you must specify a 
+          # port range.
+          SourcePrefixListId: String
+          SourceSecurityGroupId: String
+          SourceSecurityGroupName: String
+          SourceSecurityGroupOwnerId: String
+          ToPort: Integer
+     Tag:
+
+     VpcId: 
+
+
