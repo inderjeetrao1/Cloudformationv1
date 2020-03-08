@@ -1,0 +1,45 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create VPC and subnets
+Parameters:
+  Tenancy:
+    Type: String
+    Default: default
+    AllowedValues:
+      - default
+      - dedicated
+ 
+Resources:
+ VPC:
+   Type: AWS::EC2::VPC
+   Properties: 
+    CidrBlock: 10.1.0.0/16
+    EnableDnsHostnames: True
+    EnableDnsSupport: True
+    InstanceTenancy: !Ref Tenancy
+    Tags:
+      - Key: Name
+        Value:  !Join ['', [!Ref "AWS::StackName", "-VPC" ]]
+
+# Lets create a Subnet now
+
+ MySubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+     VpcId: !Ref VPC
+     CidrBlock: 10.1.1.0/24
+     AvailabilityZone: !Select 
+      - 0
+      - !GetAZs 
+       Ref: 'AWS::Region'
+
+# Create an Internet Gateway
+ InternetGateway:
+   Type: AWS::EC2::InternetGateway
+# Now attach the IG to VPC. This requires creating an attachment resource creation
+ VPCGatewayAttachment:
+  Type: AWS::EC2::VPCGatewayAttachment
+  Properties:
+    VpcId: !Ref VPC
+    InternetGatewayId: !Ref InternetGateway
+    
