@@ -10,6 +10,8 @@ Parameters:
     AllowedValues:
      - Development
      - Production
+Conditions:
+ CreateProdResources: !Equals [ !Ref EnvironmentName, Production ]
 
 Mappings:
   AWSRegionArch2AMI:
@@ -81,10 +83,47 @@ Resources:
         SubnetId: !ImportValue MySubnet
         #For a nondefault VPC, you must use security group IDs instead.
         #Image-id is conditional
-
+  EC2Volume:
+   Type: "AWS::EC2::Volume"
+   Condition: CreateProdResources
+   Properties:
+    Size: 20
+    AvailabilityZone: 
+     !GetAtt MyEC2.AvailabilityZone
+  EC2toVolumeMapping:
+   Type: "AWS::EC2::VolumeAttachment"
+   Condition: CreateProdResources
+   Properties:
+    InstanceId:
+     !Ref MyEC2
+    VolumeId:
+     !Ref EC2Volume
+    Dec: /dev/sdh
+   
   MyEIP:
     Type: AWS::EC2::EIP
     Properties: 
         InstanceId: !Ref MyEC2
+Outputs:
+ EC2:
+  Description: EC2 Instance Id
+  Value:
+   !Ref MyEC2
+  Export:
+   Name: EC2
+ SG1:
+  Description: MySG-1
+  Value:
+   !Ref MySG1
+  Export:
+   Name: SG1
+ Volume:
+  Condition: CreateProdResources
+  Description: EC2 Volume
+  Value: !Ref EC2Volume
+  Export:
+   Name: Volume
+   
+
       
         
