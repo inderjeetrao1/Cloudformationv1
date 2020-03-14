@@ -4,7 +4,7 @@ Resource:
     Type: AWS::EC2::SecurityGroup
     Properties: 
      GroupDescription: lets create a SG
-     GroupName: New SG-CF
+     GroupName: NewSGCF
      SecurityGroupEgress:
       -estring
      SecurityGroupIngress: 
