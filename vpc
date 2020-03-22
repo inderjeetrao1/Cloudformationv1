@@ -1,0 +1,57 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09T00:00:00.000Z",
+	"Description": "Create Full VPC Stack",
+	"Resources": {
+		"VPC": {
+			"Type": "AWS::EC2::VPC",
+			"Properties": {
+				"CidrBlock": "10.1.0.0/16",
+				"EnableDnsHostnames": true,
+				"EnableDnsSupport": true,
+				"InstanceTenancy": "default"
+			}
+		},
+		"SubnetA": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": null,
+				"CidrBlock": "10.1.1.0/24",
+				"AvailabilityZone": null
+			}
+		},
+		"SubnetB": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": null,
+				"CidrBlock": "10.1.2.0/24",
+				"AvailabilityZone": null
+			}
+		},
+		"InternetGateway": {
+			"Type": "AWS::EC2::InternetGateway"
+		},
+		"VPCGatewayAttachment": {
+			"Type": "AWS::EC2::VPCGatewayAttachment",
+			"Properties": {
+				"VpcId": null,
+				"InternetGatewayId": null
+			}
+		}
+	},
+	"Outputs": {
+		"MyVPC": {
+			"Description": "List VPC ID",
+			"Value": null,
+			"Export": {
+				"Name": "MyVPC"
+			}
+		},
+		"MySubnet": {
+			"Description": "List 1st Subnet ID",
+			"Value": null,
+			"Export": {
+				"Name": "MySubnet"
+			}
+		}
+	}
+}
